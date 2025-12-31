@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/schedules")
 @RequiredArgsConstructor
@@ -18,5 +20,17 @@ public class ScheduleController {
     @PostMapping
     public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequestDto requestDto) {
         return ResponseEntity.ok(scheduleService.createSchedule(requestDto));
+    }
+
+    // Lv 2. 선택 일정 조회 (ID로 조회)
+    @GetMapping("/{id}")
+    public ResponseEntity<ScheduleResponseDto> getSchedule(@PathVariable Long id) {
+        return ResponseEntity.ok(scheduleService.getSchedule(id));
+    }
+
+    // Lv 2. 전체 일정 조회
+    @GetMapping
+    public ResponseEntity<List<ScheduleResponseDto>> getSchedules() {
+        return ResponseEntity.ok(scheduleService.getSchedules());
     }
 }
