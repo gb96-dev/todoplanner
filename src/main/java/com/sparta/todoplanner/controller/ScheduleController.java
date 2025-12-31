@@ -33,4 +33,20 @@ public class ScheduleController {
     public ResponseEntity<List<ScheduleResponseDto>> getSchedules() {
         return ResponseEntity.ok(scheduleService.getSchedules());
     }
+
+    // Lv 3. 선택 일정 수정
+    @PutMapping("/{id}")
+    public ResponseEntity<ScheduleResponseDto> updateSchedule(
+            @PathVariable Long id,
+            @RequestBody ScheduleRequestDto requestDto) {
+        return ResponseEntity.ok(scheduleService.updateSchedule(id, requestDto));
+    }
+
+    // Lv 4. 선택 일정 삭제
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteSchedule(
+            @PathVariable Long id,
+            @RequestParam String password) {
+        return ResponseEntity.ok(scheduleService.deleteSchedule(id, password));
+    }
 }

@@ -43,5 +43,45 @@ public class ScheduleService {
         return scheduleRepository.findAllByOrderByUpdatedAtDesc().stream()
                 .map(ScheduleResponseDto::new)
                 .toList();
+
     }
+
+    // Lv 3. 선택 일정 수정
+    @Transactional
+    public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto) {
+        // 1. 해당 일정이 DB에 존재하는지 확인
+        Schedule schedule = scheduleRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 일정이 존재하지 않습니다. ID: " + id));
+
+        // 2. 비밀번호 일치 여부 확인 (입력받은 비번 vs DB에 저장된 비번)
+        if (!schedule.getPassword().equals(requestDto.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        // 3. 일치한다면 수정 진행 (제목, 내용, 작성자)
+        schedule.setTitle(requestDto.getTitle());
+        schedule.setContent(requestDto.getContent());
+        schedule.setAuthor(requestDto.getAuthor());
+
+        // 4. 수정된 정보를 DTO로 변환해서 반환
+        return new ScheduleResponseDto(schedule);
+    }
+
+    // Lv 4. 선택 일정 삭제
+    @Transactional
+    public String deleteSchedule(Long id, String password) {
+        // 1. 해당 일정이 DB에 존재하는지 확인
+        Schedule schedule = scheduleRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 일정이 존재하지 않습니다. ID: " + id));
+
+        // 2. 비밀번호 일치 여부 확인
+        if (!schedule.getPassword().equals(password)) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        // 3. 일치한다면 삭제
+        scheduleRepository.delete(schedule);
+        return "ID [" + id + "] 일정이 성공적으로 삭제되었습니다.";
+    }
+
 }
