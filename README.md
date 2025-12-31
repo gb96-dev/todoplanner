@@ -13,9 +13,28 @@ ORM: Spring Data JPA
 Tool: Postman (API Test), IntelliJ IDEA
 
 
-기능,Method,URL,Request Body / Param,설명
-일정 생성,POST,/api/schedules,"JSON (title, content, author, password)",새로운 일정을 등록합니다.
-일정 단건 조회,GET,/api/schedules/{id},Path Variable (id),선택한 일정의 상세 정보를 조회합니다.
-일정 목록 조회,GET,/api/schedules,-,전체 일정을 수정일 내림차순으로 조회합니다.
-일정 수정,PUT,/api/schedules/{id},"JSON (title, content, author, password)",비밀번호 일치 시 일정을 수정합니다.
-일정 삭제,DELETE,/api/schedules/{id},Query Param (password),비밀번호 일치 시 일정을 삭제합니다.
+# 일정 관리 API (Final)
+
+## 📝 API 명세서
+
+| 기능 | Method | URL | Request Body / Param | 설명 |
+|------|--------|-----|--------------------|------|
+| 일정 생성 | POST | /api/schedules | Body: `title`, `content`, `author`, `password` | 새로운 일정을 DB에 저장합니다. |
+| 일정 단건 조회 | GET | /api/schedules/{id} | Path: `id` | 특정 ID를 가진 일정의 상세 정보를 불러옵니다. |
+| 일정 목록 조회 | GET | /api/schedules | - | 전체 일정을 수정일 기준 내림차순으로 정렬하여 조회합니다. |
+| 일정 수정 | PUT | /api/schedules/{id} | Path: `id` <br> Body: `title`, `content`, `author`, `password` | 비밀번호 일치 여부 확인 후 제목, 내용, 작성자를 수정합니다. |
+| 일정 삭제 | DELETE | /api/schedules/{id} | Path: `id` <br> Query: `password` | 비밀번호 일치 여부 확인 후 해당 일정을 완전히 삭제합니다. |
+
+---
+
+## 🗂️ 테이블 구조 (ERD)
+
+| 컬럼명 | 타입 | 제약사항 | 설명 |
+|--------|------|---------|------|
+| id | Bigint | Primary Key, Auto Increment | 일정 고유 식별자 |
+| title | Varchar(200) | Not Null | 일정 제목 |
+| content | Varchar(500) | Not Null | 일정 내용 |
+| author | Varchar(50) | Not Null | 작성자 이름 |
+| password | Varchar(100) | Not Null | 수정/삭제를 위한 인증 정보 |
+| createdAt | Timestamp | Not Null, Default Current | 최초 생성 시간 |
+| updatedAt | Timestamp | Not Null, Default Current | 마지막 수정 시간 |
